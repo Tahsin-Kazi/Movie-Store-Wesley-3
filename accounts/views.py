@@ -23,7 +23,7 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)  # Log the user in
-                return successful_login(request)  # Redirect to a success page
+                return redirect(successful_login)  # Redirect to a success page
     else:
         form = AuthenticationForm()
     return render(request, "accounts/login.html", {"form": form})
