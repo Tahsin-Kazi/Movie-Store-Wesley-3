@@ -4,3 +4,4 @@
 .DS_Store
 movie-store/__pycache__
 accounts/__pycache__
+home/__pycache__
