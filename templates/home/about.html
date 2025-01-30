@@ -1,10 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>About</title>
-</head>
-<body>
-    <h1>About Us</h1>
-    <p>This is our about page.</p>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div class="p-3">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-6 mx-auto mb-3">
+        <h2>About</h2>
+        <hr />
+        <p>Welcome to GT Movies, where the future of movie ownership, renting, and purchasing is redefined.
+            We're on a mission to revolutionize the digital entertainment space by providing a seamless, 
+            cutting-edge platform for movie lovers to access their favorite films anytime, anywhere.</p>
+        <p>At GT Movies, we believe in a world where owning and renting movies is effortless --
+            no more juggling multiple subscriptions or worrying about expiring rentals. Whether
+            you're looking to build a personal collection of classics, rent the latest blockbuster 
+            for a night in, or discover hidden gems, we've got you covered with an intuitive, 
+            user-friendly experience.</p>
+        <p>With high-quality streaming, offline viewing options, and a growing library of movies 
+            across every genre, GT Movies is designed for cinephiles and casual viewers alike. 
+            Join us as we transform how the world experiences movies - one digital reel at a time.</p>
+      </div>
+      <div class="col-md-6 mx-auto mb-3 text-center">
+        <img src="{% static 'img/about.png' %}" class="max-width-100" alt="about" />
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
