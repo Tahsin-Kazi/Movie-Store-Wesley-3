@@ -8,8 +8,9 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # Log the user in after registration
-            return redirect("landing_page")  # Redirect to landing page
+            # login(request, user)  # Log the user in after registration
+            # usually doesn't it not login after registration, just boot you back to login?
+            return redirect("login")  # Redirect to landing page
     else:
         form = RegisterForm()
     return render(request, "accounts/register.html", {"form": form})
