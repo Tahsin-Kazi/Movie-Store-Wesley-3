@@ -27,8 +27,18 @@ Store Library:
 Movies:
 1. Movie Name
 2. Movie Image
-3. Movie Age Rating (Ex. pg, pg-13, etc)
+3. Movie Age Rating (Ex. pg, pg-13, etc) - (Optional)
 4. Movie Overall Rating (1-5 stars)
 5. Individual Reviews
+
 6. Add review function
 7. Add to cart button
+
+Reviews:
+1. User name 
+2. Movie name 
+3. Star rating
+4. Comments
+
+models.py file
+Create class
