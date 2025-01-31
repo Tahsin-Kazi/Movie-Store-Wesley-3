@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ user.username }}</title>
+</head>
+<body>
+{% block content %}
+
+<div class="p-3">
+  <h2>Profile</h2>
+  <p>Username: {{ user.username }}</p>
+  <p>Email: {{ user.email }}</p>
+  <p>Joined on: {{ user.date_joined }}</p>
+  <p>Last login: {{ user.last_login }}</p>
+
+  <a href="{% url 'logout' %}">Logout</a>
+</div>
+{% endblock %}
+
+</body>
+</html>
