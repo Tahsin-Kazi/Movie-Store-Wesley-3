@@ -3,8 +3,9 @@
 # Reviews:
 # 1. User name
 # 2. Movie name
-# 3. Star rating
-# 4. Comments
+# 3. Comments
+# 4. Star rating
+
 
 # Add to admin page
 # from .models import Movie, Review
