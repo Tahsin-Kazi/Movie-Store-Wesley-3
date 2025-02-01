@@ -15,7 +15,8 @@
 from django.db import models
 from django.contrib.auth. models import User
 
-class Movie(models.Model):
+# JASON ADD MODEL HERE:
+# class Movie(models.Model):
 
 class Review(models.Model):
     id = models.AutoField(primary_key=True)
@@ -25,4 +26,4 @@ class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def _str_(self):
-        return str(self.id) + ' - ' + sels.movie.name
+        return str(self.id) + ' - ' + self.movie.name
