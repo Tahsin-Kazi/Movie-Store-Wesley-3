@@ -1,11 +1,12 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Movie, Review
 from .forms import ReviewForm
+import datetime
 
 # this is now obsolete, but it's here for reference
 # it now uses the actual movies in the database, which can be altered in the admin config
 
-movies = [
+""" movies = [
     {
         'id': 1, 'name': 'Inception', 'price': 12,
         'description': 'A mind-bending heist thriller.'
@@ -22,9 +23,10 @@ movies = [
         'id': 4, 'name': 'Titanic', 'price': 11,
         'description': 'A love story set against the backdrop of the sinking Titanic.',
     },
-]
+] """
+
 def index(request):
-    # movie = movies[id - 1]
+    # movie = movies[id - 1] - no longer necessary
     template_data = {}
     template_data['title'] = "Movies"
     template_data['movies'] = Movie.objects.all()
@@ -32,16 +34,31 @@ def index(request):
                   {'template_data': template_data})
 
 def show(request, id):
-    movie = Movie.objects.get(id=id)
-    template_data = {}
-    template_data['title'] = movie.name
-    template_data['movie'] = movie
-    # i dont think these 2 next line works
-    create_review_url = reverse('movies.create_review', kwargs={'id': movie.id})
-    template_data['create_review_url'] = create_review_url
-    return render(request, 'movies/show.html', {'template_data': template_data})
+    movie = get_object_or_404(Movie, id=id)
+    template_data = {
+        'title': movie.name,
+        'movie': movie,
+        'reviews': get_reviews(id)
+    }
+    form = ReviewForm()
     
-# create and edit not functional yet
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.movie = movie
+            review.user = request.user
+            review.save()
+            return redirect('movies.show', id=movie.id)
+        
+    return render(request, 'movies/show.html', {'template_data': template_data, 'form': form})
+
+def get_reviews(id):
+    movie = Movie.objects.get(id=id)
+    reviews = Review.objects.filter(movie=movie).order_by('-created_at')
+    return reviews
+    
+# edit not functional yet
 
 def edit_review(request, id, review_id):
     movie = Movie.objects.get(id=id)
@@ -57,16 +74,3 @@ def edit_review(request, id, review_id):
     template_data['review'] = review
     
     return render(request, 'movies/edit_review.html', {'template_data': template_data})
-
-def create_review(request, id):
-    movie = Movie.objects.get(id=id)
-    if request.method == 'POST':
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            review = form.save(commit=False)
-            review.movie = movie
-            review.save()
-            return redirect('movies.show', id=movie.id)
-    else:
-        form = ReviewForm()
-    return render(request, 'movies/create_review.html', {'form': form, 'movie': movie})

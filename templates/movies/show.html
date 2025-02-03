@@ -11,9 +11,55 @@
         <p><b>Price:</b> ${{ template_data.movie.price }}</p>
       </div>
       <div class="col-md-6 mx-auto mb-3 text-center">
-        <img src="{{ template_data.movie.image.url }}" alt="Movie Image", width = "150", height = "200", class="card-img-top rounded">
+        <img src="{{ template_data.movie.image.url }}" alt="Movie Image" width="150" height="200" class="card-img-top rounded">
       </div>
     </div>
+
+    <h2>Reviews</h2>
+    <ul>
+        {% for review in template_data.reviews %}
+          <li class="review-item mb-3">
+            <div class="review-header d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ review.user.username }}</strong>
+                </div>
+                <div class="text-muted ml-3">
+                    <strong>Rating:</strong> {{ review.rating }} / 5
+                </div>
+                <span class="text-muted ml-3">{{ review.created_at|date:"F j, Y, g:i a" }}</span>
+            </div>
+            <div class="review-text mt-2">
+                <p>{{ review.text }}</p>
+            </div>
+          </li>
+        {% empty %}
+            <li>No reviews yet.</li>
+        {% endfor %}
+    </ul>
+
+    {% if user.is_authenticated %}
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card shadow p-3 mb-4 rounded">
+                    <div class="card-body">
+                        <b class="text-start">Create a review</b><br /><br />
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form.as_p }}  
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Add Review</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p>You must be logged in to leave a review.</p>
+    {% endif %}
   </div>
 </div>
+
 {% endblock content %}
