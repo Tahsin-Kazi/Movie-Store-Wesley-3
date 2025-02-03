@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, reverse
 from .models import Movie, Review
 from .forms import ReviewForm
 
+# this is now obsolete, but it's here for reference
+# it now uses the actual movies in the database, which can be altered in the admin config
+
 movies = [
     {
         'id': 1, 'name': 'Inception', 'price': 12,
@@ -24,16 +27,17 @@ def index(request):
     # movie = movies[id - 1]
     template_data = {}
     template_data['title'] = "Movies"
-    template_data['movies'] = movies
+    template_data['movies'] = Movie.objects.all()
     return render(request, 'movies/index.html',
                   {'template_data': template_data})
 
 def show(request, id):
-    movie = movies[id - 1]
+    movie = Movie.objects.get(id=id)
     template_data = {}
-    template_data['title'] = movie['name']
+    template_data['title'] = movie.name
     template_data['movie'] = movie
-    create_review_url = reverse('movies.create_review', kwargs={'id': template_data['movie']['id']})
+    # i dont think these 2 next line works
+    create_review_url = reverse('movies.create_review', kwargs={'id': movie.id})
     template_data['create_review_url'] = create_review_url
     return render(request, 'movies/show.html', {'template_data': template_data})
     
