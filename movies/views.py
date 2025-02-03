@@ -24,8 +24,8 @@ def index(request):
     # movie = movies[id - 1]
     template_data = {}
     template_data['title'] = "Movies"
-    # template_data['movies'] = movies
-    return render(request, 'movies/show.html',
+    template_data['movies'] = movies
+    return render(request, 'movies/index.html',
                   {'template_data': template_data})
 
 def show(request, id):
@@ -36,8 +36,6 @@ def show(request, id):
     create_review_url = reverse('movies.create_review', kwargs={'id': template_data['movie']['id']})
     template_data['create_review_url'] = create_review_url
     return render(request, 'movies/show.html', {'template_data': template_data})
-    
-    
     
 # create and edit not functional yet
 
