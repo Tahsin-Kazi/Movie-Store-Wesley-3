@@ -27,9 +27,7 @@ import datetime
 
 def index(request):
     # movie = movies[id - 1] - no longer necessary
-    template_data = {}
-    template_data['title'] = "Movies"
-    template_data['movies'] = Movie.objects.all()
+    template_data = {'title': "Movies", 'movies': Movie.objects.all()}
     return render(request, 'movies/index.html',
                   {'template_data': template_data})
 
@@ -69,8 +67,6 @@ def edit_review(request, id, review_id):
         review.save()
         return redirect('movies.show', id=movie.id)
     
-    template_data = {}
-    template_data['movie'] = movie
-    template_data['review'] = review
-    
+    template_data = {'movie': movie, 'review': review}
+
     return render(request, 'movies/edit_review.html', {'template_data': template_data})

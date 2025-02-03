@@ -49,30 +49,6 @@ def profile(request):
     user = request.user
     return render(request, "accounts/profile.html", {"user": user})
 
-def password_reset(request):
-    if request.method == "POST":
-        username = request.POST.get("username")
-        try:
-            user = User.objects.get(username=username)
-            # Generate a token and UID for the user
-            token = default_token_generator.make_token(user)
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            return redirect("password_reset_confirm", uidb64=uid, token=token)
-        except User.DoesNotExist:
-            return render(request, "accounts/password_reset.html", {"error": "User not found"})
-    return render(request, "accounts/password_reset.html")
-
-def password_reset_confirm(request):
-    if request.method == "POST":
-        form = SetPasswordForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            return redirect("password_reset_complete")
-    else:
-        form = SetPasswordForm(request.user)
-    return render(request, "accounts/password_reset_confirm.html", {"form": form})
-
 def successful_login(request):
     template_data = {}
     template_data = {'title': 'Success'}
