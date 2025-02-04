@@ -2,7 +2,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Movie, Review
 from .forms import ReviewForm
-import datetime
 
 # this is now obsolete, but it's here for reference
 # it now uses the actual movies in the database, which can be altered in the admin config
@@ -56,11 +55,10 @@ def get_reviews(id):
     movie = Movie.objects.get(id=id)
     reviews = Review.objects.filter(movie=movie).order_by('-created_at')
     return reviews
-    
+
 # edit not functional yet
 
 @login_required
-
 def edit_review(request, id, review_id):
     review = get_object_or_404(Review, id=review_id)
     if request.user != review.user:
