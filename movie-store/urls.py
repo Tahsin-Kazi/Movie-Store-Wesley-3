@@ -24,5 +24,10 @@ urlpatterns = [
     path("", include("accounts.urls")),
     path("", include("home.urls")),
     path('movies/', include("movies.urls")),
+
+    #path for the reviews
+    path('reviews/', include("movies.urls")),
+
+         # "'<int:id>/review/<int:review_id>/edit/', views.edit_review, name='movies.edit_review'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
