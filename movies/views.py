@@ -58,15 +58,23 @@ def get_reviews(id):
     
 # edit not functional yet
 
+@login_required
 def edit_review(request, id, review_id):
-    movie = Movie.objects.get(id=id)
-    review = Review.objects.get(id=review_id)
-    
-    if request.method == 'POST':
-        review.comment = request.POST.get('comment')
-        review.save()
-        return redirect('movies.show', id=movie.id)
-    
-    template_data = {'movie': movie, 'review': review}
+    review = get_object_or_404(Review, id=review_id)
+    if request.user != review.user:
+        return redirect('movies.show', id=review.movie.id)
 
-    return render(request, 'movies/edit_review.html', {'template_data': template_data})
+    if request.method == 'GET':
+        template_data = {}
+        template_data['title'] = 'Edit Review'
+        template_data['review'] = review
+        return render(requrest, 'movies/edit_review.html',
+                      {'template_data': template_data})
+    elif request.methd == 'POST' and request.POST['comment'] != '':
+        review = Review.objects.get(id=review_id)
+        review.comment = request.POST['comment']
+        review.save()
+        return redirect('movies.show', id=review.movie.id)
+    else:
+        return redirect('movies.show', id=review.movie.id)
+
