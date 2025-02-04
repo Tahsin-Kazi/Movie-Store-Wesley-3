@@ -80,3 +80,6 @@ def edit_review(request, id, review_id):
     else:
         return redirect('movies.show', id=review.movie.id)
 
+
+#Delete Review Code
+
