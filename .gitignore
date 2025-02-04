@@ -7,4 +7,4 @@ accounts/__pycache__
 home/__pycache__
 movies/__pycache__
 movies/migrations/__pycache__
-db.sqlite3
+.sqlite3
