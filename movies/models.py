@@ -35,4 +35,7 @@ class Profile(models.Model):
 
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
-        instance.profile.save()
+        if "profile" in instance._meta.get_fields():
+            instance.profile.save()
+        else :
+            Profile.objects.create(user=instance)
