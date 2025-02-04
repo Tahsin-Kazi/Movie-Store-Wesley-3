@@ -9,9 +9,9 @@ from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
+from movies.models import Review
 
 def register(request):
-    template_data = {}
     template_data = {'title': 'Register'}
     if request.method == "POST":
         form = RegisterForm(request.POST)
@@ -25,7 +25,6 @@ def register(request):
     return render(request, "accounts/register.html", {"form": form, "template_data": template_data})
 
 def user_login(request):
-    template_data = {}
     template_data = {'title': 'Login'}
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
@@ -47,9 +46,12 @@ def user_logout(request):
 @login_required
 def profile(request):
     user = request.user
-    return render(request, "accounts/profile.html", {"user": user})
+    template_data = {
+        'title': 'Profile',
+        'reviews': Review.objects.filter(user=user).order_by('-created_at')
+    }
+    return render(request, "accounts/profile.html", {"user": user, "template_data": template_data})
 
 def successful_login(request):
-    template_data = {}
     template_data = {'title': 'Success'}
     return render(request, 'accounts/temp_success.html', {"template_data": template_data})
