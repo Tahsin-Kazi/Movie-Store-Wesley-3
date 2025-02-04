@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Movie, Review
 from .forms import ReviewForm
@@ -59,6 +60,7 @@ def get_reviews(id):
 # edit not functional yet
 
 @login_required
+
 def edit_review(request, id, review_id):
     review = get_object_or_404(Review, id=review_id)
     if request.user != review.user:
@@ -68,7 +70,7 @@ def edit_review(request, id, review_id):
         template_data = {}
         template_data['title'] = 'Edit Review'
         template_data['review'] = review
-        return render(requrest, 'movies/edit_review.html',
+        return render(request, 'movies/edit_review.html',
                       {'template_data': template_data})
     elif request.methd == 'POST' and request.POST['comment'] != '':
         review = Review.objects.get(id=review_id)
