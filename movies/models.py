@@ -28,6 +28,9 @@ class Profile(models.Model):
     shoppingCart = models.ManyToManyField(Movie, related_name='shopping_cart')
     writtenReviews = models.ManyToManyField(Review)
 
+    def __str__(self):
+        return f"{self.user.username}"
+
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
@@ -35,7 +38,7 @@ class Profile(models.Model):
 
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
-        if "profile" in instance._meta.get_fields():
+        try:
             instance.profile.save()
-        else :
+        except:
             Profile.objects.create(user=instance)

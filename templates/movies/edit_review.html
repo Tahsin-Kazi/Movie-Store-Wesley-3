@@ -6,19 +6,13 @@
             <div class="col mx-auto mb-3">
                 <h2>Edit Review</h2>
                 <hr />
-                <form method="POST">
-                    {%  csrf_token %}
-                    <p>
-                        <label for="comment">Comment:</label>
-                        <textarea name="comment" required
-                        class="form-control" id="comment">{{ template_data.review.comment }}</textarea>
-                    </p>
-                    <div class="text-start">
-                        <button type="submit"
-                                class="btn bg-dark text-white">Edit Review
-                        </button>
-                    </div>
-                </form>
+                <h1>Edit Review</h1>
+                    <form method="POST">
+                      {% csrf_token %}
+                      {{ form.as_p }}
+                      <button type="submit">Save Changes</button>
+                    </form>
+                    <a href="{% url 'movies.show' review.movie.id %}">Cancel</a>
             </div>
         </div>
     </div>
