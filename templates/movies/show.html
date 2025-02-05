@@ -40,6 +40,9 @@
               </div>
 
           </li>
+        {% if user == review.user %}
+            <button type="submit" class="btn btn-primary"><a href="{% url 'movies.edit_review' review.id %}">Edit Review</a></button>
+        {% endif %}
         {% empty %}
             <li>No reviews yet.</li>
         {% endfor %}
@@ -54,7 +57,14 @@
                         <b class="text-start">Create a review</b><br /><br />
                         <form method="POST">
                             {% csrf_token %}
+<<<<<<< Updated upstream
                             {{ form.as_p }}
+=======
+                            {{ form.as_p }}  
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Add Review</button>
+                            </div>
+>>>>>>> Stashed changes
                         </form>
                         <button type="submit" class="btn btn-primary">Add Review</button>
                     </div>
