@@ -33,15 +33,12 @@
             </div>
               <div class="text-center">
                     {% if user == review.user %}
-
-                        #Edit Button
                         <a class="btn btn-primary"
                            href="{%  url 'movies.edit_review' review_id=review.id %}">Edit
                         </a>
 
-                        #Delete Button
                         <a class="btn btn-danger"
-                           href="{% url 'movies.delete_review' review_id=review_id %}">Edit
+                           href="{% url 'movies.delete_review' review_id=review.id %}">Delete
                         </a>
 
                     {% endif %}
