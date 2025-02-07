@@ -3,6 +3,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Movie, Review
 from .forms import ReviewForm
 
+#imports for search bar
+from tkinter import *
+import webbrowser
+from tkinter import Entry
+
 
 def index(request):
     template_data = {'title': "Movies", 'movies': Movie.objects.all()}
@@ -56,3 +61,26 @@ def delete_review(request, review_id):
     review = get_object_or_404(Review, id=review_id, user=request.user)
     review.delete()
     return redirect('movies.show', id=review.movie.id)
+
+#Search Bar stuff
+def search(request):
+
+    root = Tk()
+
+    root.title("search tab")
+
+    def search():
+        url = entry.get()
+        webbrowser.open(url)
+
+    label1 = Label(root, text="Enter Movie Title", font=("Arial", 20))
+    label1.grid(row=0, column=0)
+
+    entry = Entry(root, width=30)
+    entry.grid(row=0, column=1)
+
+    button = Button(root, text="Search", command=search)
+
+    button.grid(row=1, column=0, columnspan=2, pady=10)
+
+    root.mainloop()
