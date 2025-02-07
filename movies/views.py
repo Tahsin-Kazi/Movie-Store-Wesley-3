@@ -50,3 +50,9 @@ def edit_review(request, review_id):
     else:
         form = ReviewForm(instance=review)
         return render(request, 'movies/edit_review.html', {'form': form, 'review': review})
+
+@login_required
+def delete_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id, user=request.user)
+    review.delete()
+    return redirect('movies.show', id=review.movie.id)
