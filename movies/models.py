@@ -26,7 +26,6 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     purchasedMovies = models.ManyToManyField(Movie, related_name='purchased_movies')
     shoppingCart = models.ManyToManyField(Movie, related_name='shopping_cart')
-    writtenReviews = models.ManyToManyField(Review)
 
     def __str__(self):
         return f"{self.user.username}"
