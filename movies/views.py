@@ -8,6 +8,8 @@ from tkinter import *
 import webbrowser
 from tkinter import Entry
 
+import tkinter as tk
+from tkinter import ttk
 
 def index(request):
     template_data = {'title': "Movies", 'movies': Movie.objects.all()}
@@ -62,25 +64,80 @@ def delete_review(request, review_id):
     review.delete()
     return redirect('movies.show', id=review.movie.id)
 
-#Search Bar stuff
-def search(request):
+# #Search Bar stuff
+#
+# root = Tk()
+#
+# root.title("search tab")
+#
+# def search():
+#     url = entry.get()
+#     webbrowser.open(url)
+#
+# label1 = Label(root, text="Enter Movie Title", font=("Arial", 20))
+# label1.grid(row=0, column=0)
+#
+# entry = Entry(root, width=30)
+# entry.grid(row=0, column=1)
+#
+# button = Button(root, text="Search", command=search)
+#
+# button.grid(row=1, column=0, columnspan=2, pady=10)
+#
+# root.mainloop()
 
-    root = Tk()
+class ColumnViewSearch:
+    def __init__(self, master, data, columns):
+        self.master = master
+        self.data = data
+        self.columns = columns
+        self.filtered_data = data[:]
 
-    root.title("search tab")
+        self.search_var = tk.StringVar()
+        self.create_widgets()
+        self.update_treeview()
 
-    def search():
-        url = entry.get()
-        webbrowser.open(url)
+    def create_widgets(self):
+        # Search bar
+        self.search_entry = tk.Entry(self.master, textvariable=self.search_var)
+        self.search_entry.pack(pady=5)
+        self.search_var.trace("w", self.update_search)
 
-    label1 = Label(root, text="Enter Movie Title", font=("Arial", 20))
-    label1.grid(row=0, column=0)
+        # Treeview (column view)
+        self.tree = ttk.Treeview(self.master, columns=self.columns, show="headings")
+        for col in self.columns:
+            self.tree.heading(col, text=col)
+        self.tree.pack(expand=True, fill="both")
 
-    entry = Entry(root, width=30)
-    entry.grid(row=0, column=1)
+    def update_search(self, *args):
+        search_term = self.search_var.get().lower()
+        self.filtered_data = [
+            row for row in self.data if any(search_term in str(item).lower() for item in row)
+        ]
+        self.update_treeview()
 
-    button = Button(root, text="Search", command=search)
+    def update_treeview(self):
+        # Clear existing items
+        for item in self.tree.get_children():
+            self.tree.delete(item)
 
-    button.grid(row=1, column=0, columnspan=2, pady=10)
+        # Insert filtered data
+        for row in self.filtered_data:
+            self.tree.insert("", tk.END, values=row)
 
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("Column View Search")
+
+    # Sample data
+    data = [
+        ("Apple", 1.50, 100),
+        ("Banana", 0.75, 150),
+        ("Orange", 1.25, 120),
+        ("Grapes", 2.00, 80),
+    ]
+    columns = ("Item", "Price", "Quantity")
+
+    app = ColumnViewSearch(root, data, columns)
     root.mainloop()
