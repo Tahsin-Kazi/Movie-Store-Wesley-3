@@ -5,7 +5,19 @@ from .forms import ReviewForm
 
 
 def index(request):
-    template_data = {'title': "Movies", 'movies': Movie.objects.all()}
+
+    #Search bar
+    search_term = request.GET.get('search')
+    if search_term:
+        movies = Movie.objects.filter(name__icontains=search_term)
+    else:
+        movies = Movie.objects.all()
+
+    #Template Data
+    #template_data = {'title': "Movies", 'movies': Movie.objects.all()}
+    template_data = {}
+    template_data['title'] = 'Movies'
+    template_data['movies'] = movies
     return render(request, 'movies/index.html',
                   {'template_data': template_data})
 
@@ -56,3 +68,4 @@ def delete_review(request, review_id):
     review = get_object_or_404(Review, id=review_id, user=request.user)
     review.delete()
     return redirect('movies.show', id=review.movie.id)
+
