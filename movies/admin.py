@@ -2,9 +2,6 @@ from django.contrib import admin
 from django.utils.html import format_html
 from .models import Review, Movie, Profile, Order
 
-# admin.site.register(Review)
-admin.site.register(Order)
-
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'get_purchasedMovies', 'get_shoppingCart')
@@ -33,3 +30,14 @@ class ReviewAdmin(admin.ModelAdmin):
     search_fields = ('movie', 'user', 'rating')
     list_filter = ('rating',)
     ordering = ('movie', 'user', 'rating')
+    
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('profile', 'total', "get_movies", 'count')
+    search_fields = ('profile', 'total', 'count', "get_movies")
+    list_filter = ('total', 'count', 'created_at')
+    ordering = ('profile', 'total', 'count',)
+    
+    def get_movies(self, obj):
+        return format_html("<br>".join([str(m) for m in obj.movies.all()]))
+    get_movies.short_description = 'Purchased Movies'  
