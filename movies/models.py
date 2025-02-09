@@ -10,7 +10,7 @@ class Movie(models.Model):
     description = models.TextField()
     image = models.FileField(upload_to='movies/')
     def __str__(self):
-        return str(self.id) + ' - ' + self.name
+        return self.name
 
 class Review(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
@@ -20,7 +20,7 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username}'s review of {self.movie.name}"
+        return f"Movie: {self.movie.name}; User: {self.user.username}"
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

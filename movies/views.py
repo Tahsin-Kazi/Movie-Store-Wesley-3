@@ -4,24 +4,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Movie, Review, Order
 from .forms import ReviewForm
 
-
-def index(request):
-
-    #Search bar
-    search_term = request.GET.get('search')
-    if search_term:
-        movies = Movie.objects.filter(name__icontains=search_term)
-    else:
-        movies = Movie.objects.all()
-
-    #Template Data
-    #template_data = {'title': "Movies", 'movies': Movie.objects.all()}
-    template_data = {}
-    template_data['title'] = 'Movies'
-    template_data['movies'] = movies
-    return render(request, 'movies/index.html',
-                  {'template_data': template_data})
-
 def show(request, id):
     movie = get_object_or_404(Movie, id=id)
     template_data = {
