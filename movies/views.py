@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Movie, Review
+from .models import Movie, Review, Order
 from .forms import ReviewForm
 
 
@@ -69,3 +70,49 @@ def delete_review(request, review_id):
     review.delete()
     return redirect('movies.show', id=review.movie.id)
 
+@login_required
+def add_to_cart(request, movie_id):
+    if request.method == 'POST':
+        movie = get_object_or_404(Movie, id=movie_id)
+        request.user.profile.shoppingCart.add(movie)
+        request.user.profile.save()
+        messages.success(request, f'{movie.name} has been added to your cart!')
+        return redirect('movies.show', id=movie_id)
+    return redirect('movies.show', id=movie_id)
+
+@login_required
+def remove_from_cart(request, movie_id):
+    if request.method == 'POST':
+        movie = get_object_or_404(Movie, id=movie_id)
+        request.user.profile.shoppingCart.remove(movie)  # Remove the movie from the user's cart
+        request.user.profile.save()
+        messages.success(request, f'{movie.name} has been removed from your cart!')
+        return redirect('movies.view_cart')  # Redirect back to the cart page
+    return redirect('movies.view_cart')  # Fallback redirect
+
+@login_required
+def checkout(request):
+    if request.method == 'POST':
+        user = request.user.profile
+        if not user.shoppingCart.all():
+            messages.success(request, f'Order failed because cart is empty! Please add movies to checkout.')
+            return redirect('movies.view_cart')  # Fallback redirect
+        total = 0.0
+        order = Order.objects.create(profile=user)
+        order.count = user.shoppingCart.count()
+        for movie in user.shoppingCart.all():
+            total += movie.price
+            user.purchasedMovies.add(movie)
+            order.movies.add(movie)
+        user.shoppingCart.clear()
+        order.total = total
+        order.save()
+        user.save()
+        messages.success(request, f'{order} has been fulfilled! Movies add to your library.')
+        return redirect('profile')
+    messages.success(request, f'Error with order! Please try again later.')
+    return redirect('movies.view_cart')  # Fallback redirect
+
+@login_required
+def view_cart(request):
+    return render(request, 'movies/view_cart.html', {'cart_movies': request.user.profile.shoppingCart.all()})

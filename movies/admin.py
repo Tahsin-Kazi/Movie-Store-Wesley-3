@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import Review, Movie, Profile
+from .models import Review, Movie, Profile, Order
 
 admin.site.register(Review)
 admin.site.register(Movie)
+admin.site.register(Order)
 
 @admin.register(Profile)
 class YourModelAdmin(admin.ModelAdmin):

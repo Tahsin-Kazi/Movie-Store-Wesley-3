@@ -41,3 +41,13 @@ class Profile(models.Model):
             instance.profile.save()
         except:
             Profile.objects.create(user=instance)
+
+class Order(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    movies = models.ManyToManyField(Movie, related_name='orderedMovies')
+    total = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)
+    count = models.IntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.profile}'s order of {self.count} movies for {self.total} at {self.created_at}"
