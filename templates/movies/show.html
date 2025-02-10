@@ -17,7 +17,9 @@
             <h2>{{ template_data.movie.name }}</h2>
             <hr />
             <p><b>Description:</b> {{ template_data.movie.description }}</p>
+            <p><b>Age Rating:</b> {{ template_data.movie.age_rating }} - {{ template_data.movie.get_age_rating_display }}</p>
             <p><b>Price:</b> ${{ template_data.movie.price }}</p>
+            <p><b>Community Rating:</b> {{ template_data.avg_review }} / 5</p>
             <form method="post" action="{% url 'movies.add_to_cart' template_data.movie.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-primary btn-lg">Add to Cart</button>

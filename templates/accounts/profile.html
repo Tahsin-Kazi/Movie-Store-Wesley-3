@@ -38,5 +38,30 @@
       </ul>
     </div>
   </div>
+  <div class="col-md-12">
+    <h2 class="mb-3">Orders</h2>
+    <ul class="list-group">
+      {% for order in template_data.orders %}
+        <li class="list-group-item mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{{ order.created_at }}</strong>
+            </div>
+            <div class="text-muted">
+              <strong>Total:</strong> ${{ order.total }}
+            </div>
+            <span class="text-muted">Items: {{ order.count }}</span>
+          </div>
+          {% for m in order.movies.all %}
+          <div class="mt-2">
+            <p>{{ m }}</p>
+          </div>
+          {% endfor %}
+        </li>
+      {% empty %}
+        <li class="list-group-item">No orders yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
 </div>
 {% endblock %}

@@ -9,7 +9,9 @@ def show(request, id):
     template_data = {
         'title': movie.name,
         'movie': movie,
-        'reviews': get_reviews(id)
+        'reviews': get_reviews(id),
+        'avg_review': avg_review(id),
+        'age_rating': movie.age_rating
     }
     form = ReviewForm()
     
@@ -28,6 +30,15 @@ def get_reviews(id):
     movie = Movie.objects.get(id=id)
     reviews = Review.objects.filter(movie=movie).order_by('-created_at')
     return reviews
+
+def avg_review(id):
+    reviews = get_reviews(id)
+    if not reviews:
+        return 0
+    total = 0
+    for review in reviews:
+        total += review.rating
+    return total / len(reviews)
 
 @login_required
 def edit_review(request, review_id):

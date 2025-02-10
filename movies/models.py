@@ -4,8 +4,18 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class Movie(models.Model):
+    AGE_RATINGS = [
+        ('G', 'General Audience'),
+        ('PG', 'Parental Guidance'),
+        ('PG-13', 'Parents Strongly Cautioned'),
+        ('R', 'Restricted'),
+        ('NC-17', 'Adults Only'),
+        ('NR', 'Not Rated'),
+    ]
+    
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
+    age_rating = models.CharField(max_length=5, choices=AGE_RATINGS, default='PG')
     price = models.IntegerField()
     description = models.TextField()
     image = models.FileField(upload_to='movies/')
