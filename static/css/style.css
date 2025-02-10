@@ -3,19 +3,23 @@ body {
     display: flex;
     flex-direction: column;
     margin: 0;
-    background-color: #f8f9fa; /* Set background color to light gray */
+    background-color: #ffffff;
 }
 
 main {
     flex: 1 0 auto;
     display: flex;
     flex-direction: column;
-    background-color: #f8f9fa; /* Set background color to light gray */
+    background-color: #ffffff;
+}
+
+.navbar {
+    background-color: #000 !important;
 }
 
 .ms-footer {
     margin-top: auto;
-    background-color: #343a40; /* Set background color to dark gray */
+    background-color: #000;
     width: 100%;
 }
 
@@ -57,8 +61,3 @@ main {
 .navbar a.nav-link {
     color: #fff !important;
 }
-
-.bg-dark {
-    background-color: #343a40 !important; /* Set background color to dark gray */
-}
-
