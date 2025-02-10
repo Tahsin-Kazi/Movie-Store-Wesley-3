@@ -31,6 +31,7 @@ def get_reviews(id):
 
 @login_required
 def edit_review(request, review_id):
+    template_data = {"title": "Edit Review"} 
     review = Review.objects.get(id=review_id)
 
     if request.user != review.user:
@@ -44,7 +45,7 @@ def edit_review(request, review_id):
             return redirect('movies.show', id=review.movie.id)  # Use redirect instead of show
     else:
         form = ReviewForm(instance=review)
-        return render(request, 'movies/edit_review.html', {'form': form, 'review': review})
+        return render(request, 'movies/edit_review.html', {'form': form, 'review': review, 'template_data': template_data})
 
 @login_required
 def delete_review(request, review_id):
@@ -66,11 +67,11 @@ def add_to_cart(request, movie_id):
 def remove_from_cart(request, movie_id):
     if request.method == 'POST':
         movie = get_object_or_404(Movie, id=movie_id)
-        request.user.profile.shoppingCart.remove(movie)  # Remove the movie from the user's cart
+        request.user.profile.shoppingCart.remove(movie) 
         request.user.profile.save()
         messages.success(request, f'{movie.name} has been removed from your cart!')
-        return redirect('movies.view_cart')  # Redirect back to the cart page
-    return redirect('movies.view_cart')  # Fallback redirect
+        return redirect('movies.view_cart')  
+    return redirect('movies.view_cart') 
 
 @login_required
 def checkout(request):
@@ -78,7 +79,7 @@ def checkout(request):
         user = request.user.profile
         if not user.shoppingCart.all():
             messages.success(request, f'Order failed because cart is empty! Please add movies to checkout.')
-            return redirect('movies.view_cart')  # Fallback redirect
+            return redirect('movies.view_cart') 
         total = 0.0
         order = Order.objects.create(profile=user)
         order.count = user.shoppingCart.count()
@@ -97,7 +98,8 @@ def checkout(request):
 
 @login_required
 def view_cart(request):
-    return render(request, 'movies/view_cart.html', {'cart_movies': request.user.profile.shoppingCart.all()})
+    template_data = {"title": "Shopping Cart"}
+    return render(request, 'movies/view_cart.html', {'cart_movies': request.user.profile.shoppingCart.all(), 'template_data': template_data})
 
 @login_required
 def delete_all_from_cart(request):
