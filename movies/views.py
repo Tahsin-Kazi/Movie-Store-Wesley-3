@@ -91,10 +91,19 @@ def checkout(request):
         order.save()
         user.save()
         messages.success(request, f'{order} has been fulfilled! Movies add to your library.')
-        return redirect('profile')
+        return redirect('home.index')
     messages.success(request, f'Error with order! Please try again later.')
     return redirect('movies.view_cart')  # Fallback redirect
 
 @login_required
 def view_cart(request):
     return render(request, 'movies/view_cart.html', {'cart_movies': request.user.profile.shoppingCart.all()})
+
+@login_required
+def delete_all_from_cart(request):
+    if request.method == 'POST':
+        cart = request.user.profile.shoppingCart.all()
+        for movie in cart:
+            request.user.profile.shoppingCart.remove(movie)
+        messages.success(request, 'All items have been removed from your cart.')
+    return redirect('movies.view_cart')
