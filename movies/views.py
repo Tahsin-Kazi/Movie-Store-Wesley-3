@@ -38,6 +38,7 @@ def avg_review(id):
     total = 0
     for review in reviews:
         total += review.rating
+        total = round(total, 1)
     return total / len(reviews)
 
 @login_required
