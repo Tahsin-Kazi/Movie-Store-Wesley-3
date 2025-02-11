@@ -34,8 +34,8 @@ class Review(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    purchasedMovies = models.ManyToManyField(Movie, related_name='purchased_movies')
-    shoppingCart = models.ManyToManyField(Movie, related_name='shopping_cart')
+    purchasedMovies = models.JSONField(default=list)
+    shoppingCart = models.JSONField(default=list)
 
     def __str__(self):
         return f"{self.user.username}"
