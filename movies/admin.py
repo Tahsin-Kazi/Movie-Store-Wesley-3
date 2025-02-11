@@ -7,15 +7,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'get_purchasedMovies', 'get_shoppingCart')
     search_fields = ('user',)  
     list_filter = ('user',) 
-    ordering = ('user',)  
-
-    def get_purchasedMovies(self, obj):
-        return format_html("<br>".join([str(m) for m in obj.purchasedMovies.all()]))
-    get_purchasedMovies.short_description = 'Purchased Movies' 
-
-    def get_shoppingCart(self, obj):
-        return format_html("<br>".join([str(m) for m in obj.shoppingCart.all()]))
-    get_shoppingCart.short_description = 'Shopping Cart'  
+    ordering = ('user',)
     
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
@@ -40,4 +32,6 @@ class OrderAdmin(admin.ModelAdmin):
     
     def get_movies(self, obj):
         return format_html("<br>".join([str(m) for m in obj.movies.all()]))
-    get_movies.short_description = 'Purchased Movies'  
+
+    def get_review(self, obj):
+        return "\n".join([str(m) for m in obj.review.all()])
