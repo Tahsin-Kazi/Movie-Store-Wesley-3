@@ -4,7 +4,7 @@ from .models import Review, Movie, Profile, Order
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'get_purchasedMovies', 'get_shoppingCart')
+    list_display = ('user',)
     search_fields = ('user',)  
     list_filter = ('user',) 
     ordering = ('user',)
