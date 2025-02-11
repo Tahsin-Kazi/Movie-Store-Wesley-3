@@ -34,12 +34,13 @@ def get_reviews(id):
 def avg_review(id):
     reviews = get_reviews(id)
     if not reviews:
-        return 0
-    total = 0
-    for review in reviews:
-        total += review.rating
-        total = round(total, 1)
-    return total / len(reviews)
+        return str("Unrated")
+    else:
+        total = 0
+        for review in reviews:
+            total += review.rating
+            total = round(total, 1)
+        return total / len(reviews)
 
 @login_required
 def edit_review(request, review_id):
