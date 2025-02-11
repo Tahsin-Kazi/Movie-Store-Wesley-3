@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% if messages %}
+    <div class="alert alert-success">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+{% endif %}
+<div class="container mt-5 mb-5">
+    <h1 class="text-center mb-4">Your Cart</h1>
+    <div class="row">
+      {% for movie in cart_movies %}
+      <div class="col-md-4 col-lg-3 mb-4">
+        <div class="card h-100">
+          <img src="{{ movie.image.url }}" alt="Movie Image" class="card-img-top rounded" style="height: 200px; object-fit: cover;">
+          <div class="card-body text-center">
+            <h4 class="card-title">
+              <a href="{% url 'movies.show' id=movie.id %}" class="text-dark text-decoration-none">
+                {{ movie.name }}
+              </a>
+            </h4>
+            <p class="card-text"><strong>Price:</strong> ${{ movie.price }}</p>
+            <form method="post" action="{% url 'movies.remove_from_cart' movie.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm mt-2">Remove</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <div class="alert alert-info text-center">
+          Your cart is empty.
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% if cart_movies %}
+    <div class="text-center mt-4">
+        <form method="post" action="{% url 'movies.checkout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-lg">Checkout</button>
+        </form>
+        <form method="post" action="{% url 'movies.delete_all_from_cart' %}" class="mt-2">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-lg">Delete All</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

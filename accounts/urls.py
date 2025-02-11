@@ -1,13 +1,14 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from accounts.views import register, user_login, user_logout, profile, successful_login
+from . import views
 
 urlpatterns = [
-    path("register/", register, name="register"),
-    path("login/", user_login, name="login"),
-    path("logout/", user_logout, name="logout"),
-    path("profile/", profile, name="profile"),
-    path("success/", successful_login, name="success"),
+    path("register/", views.register, name="register"),
+    path("login/", views.user_login, name="login"),
+    path("logout/", views.user_logout, name="logout"),
+    path("profile/", views.profile, name="profile"),
+    path("success/", views.successful_login, name="success"),
+    path("library/", views.library, name="library"),
 
     path(
         "password-reset/",

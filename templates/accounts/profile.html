@@ -1,46 +1,67 @@
 {% extends 'base.html' %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ user.username }}</title>
-</head>
-<body>
+{% load static %}
 {% block content %}
-
-<div class="p-3">
-  <h2>Profile</h2>
-  <p>Username: {{ user.username }}</p>
-  <p>Email: {{ user.email }}</p>
-  <p>Joined on: {{ user.date_joined }}</p>
-  <p>Last login: {{ user.last_login }}</p>
-
-  <a href="{% url 'logout' %}">Logout</a>
-  
-  <br><br>
-  <h2>Reviews</h2>
-  <ul>
-      {% for review in template_data.reviews %}
-        <li class="review-item mb-3">
-          <div class="review-header d-flex justify-content-between align-items-center">
+<div class="container mt-5 mb-5">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <h2 class="card-title">{{ user.username }}</h2>
+          <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
+          <p class="card-text"><strong>Joined on:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
+          <p class="card-text"><strong>Last login:</strong> {{ user.last_login|date:"F j, Y, g:i a" }}</p>
+          <a href="{% url 'logout' %}" class="btn btn-danger mt-3">Logout</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <h2>Reviews</h2>
+      <ul class="list-group">
+        {% for review in template_data.reviews %}
+          <li class="list-group-item mb-3">
+            <div class="d-flex justify-content-between align-items-center">
               <div>
-                  <strong>{{ review.movie.name }}</strong>
+                <strong>{{ review.movie.name }}</strong>
               </div>
-              <div class="text-muted ml-3">
-                  <strong>Rating:</strong> {{ review.rating }} / 5
+              <div class="text-muted">
+                <strong>Rating:</strong> {{ review.rating }} / 5
               </div>
-              <span class="text-muted ml-3">{{ review.created_at|date:"F j, Y, g:i a" }}</span>
-          </div>
-          <div class="review-text mt-2">
+              <span class="text-muted">{{ review.created_at|date:"F j, Y, g:i a" }}</span>
+            </div>
+            <div class="mt-2">
               <p>{{ review.text }}</p>
+            </div>
+          </li>
+        {% empty %}
+          <li class="list-group-item">No reviews yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <h2 class="mb-3">Orders</h2>
+    <ul class="list-group">
+      {% for order in template_data.orders %}
+        <li class="list-group-item mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{{ order.created_at }}</strong>
+            </div>
+            <div class="text-muted">
+              <strong>Total:</strong> ${{ order.total }}
+            </div>
+            <span class="text-muted">Items: {{ order.count }}</span>
           </div>
+          {% for m in order.movies.all %}
+          <div class="mt-2">
+            <p>{{ m }}</p>
+          </div>
+          {% endfor %}
         </li>
       {% empty %}
-          <li>No reviews yet.</li>
+        <li class="list-group-item">No orders yet.</li>
       {% endfor %}
-  </ul>
+    </ul>
+  </div>
 </div>
-
 {% endblock %}
-
-</body>
-</html>

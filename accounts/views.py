@@ -9,7 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-from movies.models import Review
+from movies.models import Review, Profile, Order
 
 def register(request):
     template_data = {'title': 'Register'}
@@ -48,10 +48,28 @@ def profile(request):
     user = request.user
     template_data = {
         'title': 'Profile',
-        'reviews': Review.objects.filter(user=user).order_by('-created_at')
+        'reviews': Review.objects.filter(user=user).order_by('-created_at'),
+        'orders': get_orders(user),
     }
     return render(request, "accounts/profile.html", {"user": user, "template_data": template_data})
 
 def successful_login(request):
     template_data = {'title': 'Success'}
     return render(request, 'accounts/temp_success.html', {"template_data": template_data})
+
+@login_required
+def library(request):
+    user = request.user
+    template_data = {
+        'title': 'Library',
+        'owned': get_owned(user),
+    }
+    return render(request, "accounts/library.html", {"user": user, "template_data": template_data})
+
+def get_owned(user):
+    p = Profile.objects.get(user=user)
+    return p.purchasedMovies.all()
+
+def get_orders(user):
+    p = Profile.objects.get(user=user)
+    return Order.objects.filter(profile=p).order_by('-created_at')

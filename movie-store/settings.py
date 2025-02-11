@@ -27,6 +27,8 @@ SECRET_KEY = 'django-insecure-fich#vzwpzr568-i$n3k*%42+_d-ju=v&2+6i!tyh&sci18bf=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+LOGIN_URL = '/login/'
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
@@ -50,7 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home',
     'movies'
-    # 'cart',
 ]
 
 MIDDLEWARE = [
@@ -90,7 +91,7 @@ WSGI_APPLICATION = 'movie-store.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
