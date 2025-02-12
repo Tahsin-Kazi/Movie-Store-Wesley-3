@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-fich#vzwpzr568-i$n3k*%42+_d-ju=v&2+6i!tyh&sci18bf='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 LOGIN_URL = '/login/'
 
@@ -38,7 +38,9 @@ EMAIL_HOST_PASSWORD = "xpae oubf mwnb ilis"  # Your Gmail password or app-specif
 
 # 9&u<MC3B88
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "https://moviestorew3.up.railway.app/",
+]
 
 
 # Application definition
