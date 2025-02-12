@@ -112,14 +112,16 @@ def checkout(request):
     if request.method == 'POST':
         user = request.user.profile
         if not user.shoppingCart:
-            messages.success(request, f'Order failed because cart is empty! Please add movies to checkout.')
+            messages.error(request, 'Order failed because cart is empty! Please add movies to checkout.')
             return redirect('movies.view_cart') 
         total = 0.0
+        total_count = 0
         order = Order.objects.create(profile=user)
-        order.count = len(user.shoppingCart)
         for movie_id, quantity in user.shoppingCart.items():
             movie = Movie.objects.get(id=movie_id)
+            quantity = int(quantity)
             total += float(movie.price * quantity)
+            total_count += quantity
             if str(movie_id) in user.purchasedMovies:
                 user.purchasedMovies[str(movie_id)] += quantity
             else:
@@ -128,11 +130,12 @@ def checkout(request):
             order.copies.append(quantity)
         user.shoppingCart.clear()
         order.total = total
+        order.count = total_count
         order.save()
         user.save()
-        messages.success(request, f'{order} has been fulfilled! Movies add to your library.')
+        messages.success(request, 'Your order has been fulfilled! Movies added to your library.')
         return redirect('home.index')
-    messages.success(request, f'Error with order! Please try again later.')
+    messages.error(request, 'Error with order! Please try again later.')
     return redirect('movies.view_cart')
 
 @login_required
@@ -140,9 +143,13 @@ def view_cart(request):
     template_data = {"title": "Shopping Cart"}
     cart = request.user.profile.shoppingCart
     movies = []
-    for movie, quantity in cart.items():
-        movies.append((get_object_or_404(Movie, id=movie), quantity))
-    return render(request, 'movies/view_cart.html', {'cart_movies': movies, 'template_data': template_data, 'e_form' : EditCartForm()})
+    order_total = 0.0
+    for movie_id, quantity in cart.items():
+        movie = get_object_or_404(Movie, id=movie_id)
+        total_cost = movie.price * quantity
+        order_total += total_cost
+        movies.append((movie, quantity, total_cost))
+    return render(request, 'movies/view_cart.html', {'cart_movies': movies, 'order_total': order_total, 'template_data': template_data, 'e_form': EditCartForm()})
 
 @login_required
 def delete_all_from_cart(request):

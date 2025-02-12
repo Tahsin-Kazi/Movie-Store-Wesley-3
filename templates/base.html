@@ -68,6 +68,9 @@
               <p><a class="nav-link" href="{% url 'register' %}">Register</a></p>
               <p><a class="nav-link" href="{% url 'password_reset' %}">Forgot Password</a></p>
             {% else %}
+              <p><a class="nav-link" href="{% url 'library' %}">Library</a></p>
+              <p><a class="nav-link" href="{% url 'profile' %}">Profile</a></p>
+              <p><a class="nav-link" href="{% url 'movies.view_cart' %}">Cart</a></p>
               <p><a class="nav-link" href="{% url 'logout' %}">Logout</a></p>
             {% endif %}
           </div>
