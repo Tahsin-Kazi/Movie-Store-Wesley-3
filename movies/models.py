@@ -34,8 +34,8 @@ class Review(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    purchasedMovies = models.JSONField(default=list)
-    shoppingCart = models.JSONField(default=list)
+    purchasedMovies = models.JSONField(default=dict)
+    shoppingCart = models.JSONField(default=dict)
 
     def __str__(self):
         return f"{self.user.username}"
@@ -54,8 +54,9 @@ class Profile(models.Model):
 
 class Order(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    movies = models.ManyToManyField(Movie, related_name='orderedMovies')
-    total = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)
+    movies = models.ManyToManyField(Movie, related_name='orders')
+    copies = models.JSONField(default=list)
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     count = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
 

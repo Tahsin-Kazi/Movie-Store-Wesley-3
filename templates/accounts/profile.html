@@ -54,7 +54,12 @@
           </div>
           {% for m in order.movies.all %}
           <div class="mt-2">
-            <p>{{ m }}</p>
+            <p><strong>Movie:</strong> {{ m }}</p>
+                {% for c in order.copies %}
+                  {% if forloop.counter == forloop.parentloop.counter %}
+                    <p><strong>Copies:</strong> {{ c }}</p>
+                  {% endif %}
+                {% endfor %}
           </div>
           {% endfor %}
         </li>

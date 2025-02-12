@@ -18,3 +18,16 @@ class ReviewForm(forms.ModelForm):
     text = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 4, 'cols': 40})  
     )
+
+class BuyForm(forms.Form):
+    quantity = forms.IntegerField(
+        min_value=1,
+        initial=1,
+        widget=forms.NumberInput(attrs={'step': '1'})
+    )
+
+class EditCartForm(forms.Form):
+    quantity = forms.IntegerField(
+        min_value=1,
+        widget=forms.NumberInput(attrs={'step': '1'})
+    )

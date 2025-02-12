@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from accounts.forms import RegisterForm
 from home.views import index
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -9,7 +9,8 @@ from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-from movies.models import Review, Profile, Order
+from movies.models import Review, Profile, Order, Movie
+
 
 def register(request):
     template_data = {'title': 'Register'}
@@ -62,14 +63,17 @@ def library(request):
     user = request.user
     template_data = {
         'title': 'Library',
-        'owned': get_owned(user),
+        'library': get_library(user),
     }
     return render(request, "accounts/library.html", {"user": user, "template_data": template_data})
-
-def get_owned(user):
-    p = Profile.objects.get(user=user)
-    return p.purchasedMovies.all()
 
 def get_orders(user):
     p = Profile.objects.get(user=user)
     return Order.objects.filter(profile=p).order_by('-created_at')
+
+def get_library(user):
+    temp = Profile.objects.get(user=user).purchasedMovies
+    res = []
+    for movie_id, quantity in temp.items():
+        res.append((get_object_or_404(Movie, id=movie_id), quantity))
+    return res

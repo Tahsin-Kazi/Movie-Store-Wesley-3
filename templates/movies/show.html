@@ -22,6 +22,7 @@
             <p><b>Community Rating:</b> {{ template_data.avg_review }} </p>
             <form method="post" action="{% url 'movies.add_to_cart' template_data.movie.id %}">
                 {% csrf_token %}
+                {{ b_form.as_p }}
                 <button type="submit" class="btn btn-primary btn-lg">Add to Cart</button>
             </form>
         </div>
@@ -74,13 +75,13 @@
                     <div class="mb-3">
                         <label for="id_text" class="form-label">Review</label>
                         <div class="text-center">
-                            {{ form.text }}
+                            {{ r_form.text }}
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="id_rating" class="form-label">Rating</label>
                         <div class="text-center">
-                            {{ form.rating }}
+                            {{ r_form.rating }}
                         </div>
                     </div>
                     <div class="text-center">
