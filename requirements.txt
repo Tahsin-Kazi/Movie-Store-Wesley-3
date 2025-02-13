@@ -1,3 +1,4 @@
 certifi
 django
 gunicorn
+django-unfold
